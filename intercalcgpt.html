@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Result Calculator</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #6dd5fa, #2980b9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 10px;
+    }
+
+    #box {
+      background: #fff;
+      width: 100%;
+      max-width: 330px;
+      padding: 20px 15px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    h2 {
+      color: #2980b9;
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      height: 38px;
+      margin: 6px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 8px;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    input[type="text"]:focus {
+      border-color: #2980b9;
+      box-shadow: 0 0 5px rgba(41,128,185,0.4);
+      outline: none;
+    }
+
+    .btns {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    #submit, #clear {
+      flex: 1;
+      margin: 5px;
+      height: 40px;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      color: #fff;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    #submit {
+      background: #27ae60;
+    }
+
+    #clear {
+      background: #e74c3c;
+    }
+
+    #submit:hover {
+      background: #2ecc71;
+    }
+
+    #clear:hover {
+      background: #ff6b6b;
+    }
+
+    h3 {
+      margin-top: 10px;
+      font-size: 15px;
+      color: #34495e;
+    }
+
+    .show_result {
+      width: 100%;
+      height: 38px;
+      border-radius: 8px;
+      border: 2px solid #2980b9;
+      margin: 5px 0 10px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: #2c3e50;
+      background: #ecf0f1;
+      font-size: 14px;
+    }
+
+    #Grade {
+      font-size: 14px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 2px solid #2980b9;
+      background: #f8f9fa;
+      color: #2c3e50;
+      font-weight: 600;
+    }
+
+    @media (max-width: 400px) {
+      #box {
+        padding: 15px 10px;
+      }
+
+      h2 {
+        font-size: 18px;
+      }
+
+      input[type="text"] {
+        font-size: 13px;
+        height: 35px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="box">
+    <h2>Result Calculator</h2>
+
+    <input type="text" placeholder="Hindi Marks" id="Hindi">
+    <input type="text" placeholder="English Marks" id="English">
+    <input type="text" placeholder="Math Marks" id="Math">
+    <input type="text" placeholder="Physics Marks" id="Physics">
+    <input type="text" placeholder="Chemistry Marks" id="Chemistry">
+
+    <div class="btns">
+      <input type="button" value="Submit" id="submit">
+      <input type="button" value="Clear" id="clear">
+    </div>
+
+    <h3>Total Marks</h3>
+    <div id="Marks" class="show_result"></div>
+
+    <h3>Percentage</h3>
+    <div id="Perc" class="show_result"></div>
+
+    <h3>Grade</h3>
+    <div id="Grade" class="show_result"></div>
+  </div>
+
+  <script>
+    document.getElementById('submit').addEventListener("click", function(){
+      var h = Number(document.getElementById('Hindi').value);
+      var e = Number(document.getElementById('English').value);
+      var m = Number(document.getElementById('Math').value);
+      var p = Number(document.getElementById('Physics').value);
+      var c = Number(document.getElementById('Chemistry').value);
+
+      if([h,e,m,p,c].some(isNaN)){
+        alert("Please enter valid marks for all subjects!");
+        return;
+      }
+
+      var total = h + e + m + p + c;
+      var perce = total / 5;
+
+      document.getElementById("Marks").innerText = total;
+      document.getElementById("Perc").innerText = perce.toFixed(2) + "%";
+
+      let gradeBox = document.getElementById("Grade");
+      if(perce >= 80 && perce <= 100){
+        gradeBox.innerText = "Grade A 🎉 Excellent!";
+        gradeBox.style.background = "#2ecc71";
+        gradeBox.style.color = "white";
+      } else if(perce >= 60){
+        gradeBox.innerText = "Grade B 😊 Good Job!";
+        gradeBox.style.background = "#f1c40f";
+        gradeBox.style.color = "white";
+      } else if(perce >= 40){
+        gradeBox.innerText = "Grade C 😐 Needs Improvement";
+        gradeBox.style.background = "#e67e22";
+        gradeBox.style.color = "white";
+      } else {
+        gradeBox.innerText = "Fail 😢 Better Luck Next Time";
+        gradeBox.style.background = "#e74c3c";
+        gradeBox.style.color = "white";
+      }
+    });
+
+    document.getElementById('clear').addEventListener("click", function(){
+      document.querySelectorAll('input[type="text"]').forEach(input => input.value = "");
+      document.querySelectorAll('.show_result').forEach(div => div.innerText = "");
+      let gradeBox = document.getElementById("Grade");
+      gradeBox.style.background = "#f8f9fa";
+      gradeBox.style.color = "#2c3e50";
+    });
+  </script>
+</body>
+</html>
